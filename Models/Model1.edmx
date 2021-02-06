@@ -1,0 +1,608 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="testepraticoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="CPF" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="RG" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DataNascimento" Type="datetime" Nullable="false" />
+          <Property Name="Ativo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Endereco">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdentificadorCliente" Type="int" Nullable="false" />
+          <Property Name="Logradouro" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Numero" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Complemento" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Cidade" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="UF" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="CEP" Type="nvarchar" MaxLength="9" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Loja">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'testepratico.dbo.Loja_has_Cliente' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Loja_has_Cliente">
+          <Key>
+            <PropertyRef Name="IdentificadorLoja" />
+            <PropertyRef Name="IdentificadorCliente" />
+          </Key>
+          <Property Name="IdentificadorLoja" Type="int" Nullable="false" />
+          <Property Name="IdentificadorCliente" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Endereco_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Endereco" Type="Self.Endereco" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="Endereco">
+              <PropertyRef Name="IdentificadorCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loja_has_Cliente_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Loja_has_Cliente" Type="Self.Loja_has_Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="Loja_has_Cliente">
+              <PropertyRef Name="IdentificadorCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loja_has_Cliente_Loja">
+          <End Role="Loja" Type="Self.Loja" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Loja_has_Cliente" Type="Self.Loja_has_Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Loja">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="Loja_has_Cliente">
+              <PropertyRef Name="IdentificadorLoja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AlerarEndereco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="logradouro" Type="nvarchar" Mode="In" />
+          <Parameter Name="Numero" Type="nvarchar" Mode="In" />
+          <Parameter Name="complemento" Type="nvarchar" Mode="In" />
+          <Parameter Name="cidade" Type="nvarchar" Mode="In" />
+          <Parameter Name="Uf" Type="nvarchar" Mode="In" />
+          <Parameter Name="CEP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="alterarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="nome" Type="nvarchar" Mode="In" />
+          <Parameter Name="CPF" Type="nvarchar" Mode="In" />
+          <Parameter Name="RG" Type="nvarchar" Mode="In" />
+          <Parameter Name="DataNascimento" Type="datetime" Mode="In" />
+          <Parameter Name="Ativo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="ApagarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ApagarEndereco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="inserirCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nome" Type="nvarchar" Mode="In" />
+          <Parameter Name="CPF" Type="nvarchar" Mode="In" />
+          <Parameter Name="RG" Type="nvarchar" Mode="In" />
+          <Parameter Name="DataNascimento" Type="datetime" Mode="In" />
+          <Parameter Name="Ativo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="inserirEndereco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idCliente" Type="int" Mode="In" />
+          <Parameter Name="logradouro" Type="nvarchar" Mode="In" />
+          <Parameter Name="Numero" Type="nvarchar" Mode="In" />
+          <Parameter Name="complemento" Type="nvarchar" Mode="In" />
+          <Parameter Name="cidade" Type="nvarchar" Mode="In" />
+          <Parameter Name="Uf" Type="nvarchar" Mode="In" />
+          <Parameter Name="CEP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="listarClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="listarendereco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="listarLojas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="selecionarCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="selecionarClienteAtivo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Ativo" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="selecionarEndereco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="testepraticoModelStoreContainer">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Endereco" EntityType="Self.Endereco" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loja" EntityType="Self.Loja" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loja_has_Cliente" EntityType="Self.Loja_has_Cliente" store:Type="Tables" Schema="dbo">
+            
+          </EntitySet>
+          <AssociationSet Name="FK_Endereco_Cliente1" Association="Self.FK_Endereco_Cliente1">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Endereco" EntitySet="Endereco" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loja_has_Cliente_Cliente" Association="Self.FK_Loja_has_Cliente_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Loja_has_Cliente" EntitySet="Loja_has_Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loja_has_Cliente_Loja" Association="Self.FK_Loja_has_Cliente_Loja">
+            <End Role="Loja" EntitySet="Loja" />
+            <End Role="Loja_has_Cliente" EntitySet="Loja_has_Cliente" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="testepraticoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CPF" Type="String" MaxLength="14" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RG" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DataNascimento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Endereco" Relationship="Self.FK_Endereco_Cliente1" FromRole="Cliente" ToRole="Endereco" />
+          <NavigationProperty Name="Loja" Relationship="Self.Loja_has_Cliente" FromRole="Cliente" ToRole="Loja" />
+        </EntityType>
+        <EntityType Name="Endereco">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdentificadorCliente" Type="Int32" Nullable="false" />
+          <Property Name="Logradouro" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Numero" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Complemento" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cidade" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UF" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CEP" Type="String" MaxLength="9" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Endereco_Cliente1" FromRole="Endereco" ToRole="Cliente" />
+        </EntityType>
+        <EntityType Name="Loja">
+          <Key>
+            <PropertyRef Name="Identificador" />
+          </Key>
+          <Property Name="Identificador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.Loja_has_Cliente" FromRole="Loja" ToRole="Cliente" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Endereco_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Endereco" Type="Self.Endereco" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="Identificador" />
+            </Principal>
+            <Dependent Role="Endereco">
+              <PropertyRef Name="IdentificadorCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Loja_has_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
+          <End Role="Loja" Type="Self.Loja" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="testepraticoEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Endereco" EntityType="Self.Endereco" />
+          <EntitySet Name="Loja" EntityType="Self.Loja" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_Endereco_Cliente1" Association="Self.FK_Endereco_Cliente1">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Endereco" EntitySet="Endereco" />
+          </AssociationSet>
+          <AssociationSet Name="Loja_has_Cliente" Association="Self.Loja_has_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Loja" EntitySet="Loja" />
+          </AssociationSet>
+          <FunctionImport Name="AlerarEndereco">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="logradouro" Mode="In" Type="String" />
+            <Parameter Name="Numero" Mode="In" Type="String" />
+            <Parameter Name="complemento" Mode="In" Type="String" />
+            <Parameter Name="cidade" Mode="In" Type="String" />
+            <Parameter Name="Uf" Mode="In" Type="String" />
+            <Parameter Name="CEP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="alterarCliente">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="nome" Mode="In" Type="String" />
+            <Parameter Name="CPF" Mode="In" Type="String" />
+            <Parameter Name="RG" Mode="In" Type="String" />
+            <Parameter Name="DataNascimento" Mode="In" Type="DateTime" />
+            <Parameter Name="Ativo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="ApagarCliente">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ApagarEndereco">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="inserirCliente">
+            <Parameter Name="nome" Mode="In" Type="String" />
+            <Parameter Name="CPF" Mode="In" Type="String" />
+            <Parameter Name="RG" Mode="In" Type="String" />
+            <Parameter Name="DataNascimento" Mode="In" Type="DateTime" />
+            <Parameter Name="Ativo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="inserirEndereco">
+            <Parameter Name="idCliente" Mode="In" Type="Int32" />
+            <Parameter Name="logradouro" Mode="In" Type="String" />
+            <Parameter Name="Numero" Mode="In" Type="String" />
+            <Parameter Name="complemento" Mode="In" Type="String" />
+            <Parameter Name="cidade" Mode="In" Type="String" />
+            <Parameter Name="Uf" Mode="In" Type="String" />
+            <Parameter Name="CEP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="listarClientes" ReturnType="Collection(testepraticoModel.listarClientes_Result)" />
+          <FunctionImport Name="listarendereco" ReturnType="Collection(testepraticoModel.listarendereco_Result)" />
+          <FunctionImport Name="listarLojas" ReturnType="Collection(testepraticoModel.listarLojas_Result)" />
+          <FunctionImport Name="selecionarCliente" ReturnType="Collection(testepraticoModel.selecionarCliente_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="selecionarClienteAtivo" ReturnType="Collection(testepraticoModel.selecionarClienteAtivo_Result)">
+            <Parameter Name="Ativo" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="selecionarEndereco" ReturnType="Collection(testepraticoModel.selecionarEndereco_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(testepraticoModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(testepraticoModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="listarClientes_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="String" Name="Nome" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="CPF" Nullable="false" MaxLength="14" />
+          <Property Type="String" Name="RG" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="DataNascimento" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="Ativo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="listarendereco_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="Int32" Name="IdentificadorCliente" Nullable="false" />
+          <Property Type="String" Name="Logradouro" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Numero" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Complemento" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="Cidade" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="UF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="CEP" Nullable="false" MaxLength="9" />
+        </ComplexType>
+        <ComplexType Name="listarLojas_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="String" Name="Nome" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="selecionarCliente_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="String" Name="Nome" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="CPF" Nullable="false" MaxLength="14" />
+          <Property Type="String" Name="RG" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="DataNascimento" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="Ativo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="selecionarClienteAtivo_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="String" Name="Nome" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="CPF" Nullable="false" MaxLength="14" />
+          <Property Type="String" Name="RG" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="DataNascimento" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="Ativo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="selecionarEndereco_Result">
+          <Property Type="Int32" Name="Identificador" Nullable="false" />
+          <Property Type="Int32" Name="IdentificadorCliente" Nullable="false" />
+          <Property Type="String" Name="Logradouro" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Numero" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Complemento" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="Cidade" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="UF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="CEP" Nullable="false" MaxLength="9" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="testepraticoModelStoreContainer" CdmEntityContainer="testepraticoEntities2">
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="testepraticoModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="RG" ColumnName="RG" />
+                <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Endereco">
+            <EntityTypeMapping TypeName="testepraticoModel.Endereco">
+              <MappingFragment StoreEntitySet="Endereco">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="IdentificadorCliente" ColumnName="IdentificadorCliente" />
+                <ScalarProperty Name="Logradouro" ColumnName="Logradouro" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+                <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+                <ScalarProperty Name="UF" ColumnName="UF" />
+                <ScalarProperty Name="CEP" ColumnName="CEP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Loja">
+            <EntityTypeMapping TypeName="testepraticoModel.Loja">
+              <MappingFragment StoreEntitySet="Loja">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="testepraticoModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Loja_has_Cliente" TypeName="testepraticoModel.Loja_has_Cliente" StoreEntitySet="Loja_has_Cliente">
+            <EndProperty Name="Cliente">
+              <ScalarProperty Name="Identificador" ColumnName="IdentificadorCliente" />
+            </EndProperty>
+            <EndProperty Name="Loja">
+              <ScalarProperty Name="Identificador" ColumnName="IdentificadorLoja" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="AlerarEndereco" FunctionName="testepraticoModel.Store.AlerarEndereco" />
+          <FunctionImportMapping FunctionImportName="alterarCliente" FunctionName="testepraticoModel.Store.alterarCliente" />
+          <FunctionImportMapping FunctionImportName="ApagarCliente" FunctionName="testepraticoModel.Store.ApagarCliente" />
+          <FunctionImportMapping FunctionImportName="ApagarEndereco" FunctionName="testepraticoModel.Store.ApagarEndereco" />
+          <FunctionImportMapping FunctionImportName="inserirCliente" FunctionName="testepraticoModel.Store.inserirCliente" />
+          <FunctionImportMapping FunctionImportName="inserirEndereco" FunctionName="testepraticoModel.Store.inserirEndereco" />
+          <FunctionImportMapping FunctionImportName="listarClientes" FunctionName="testepraticoModel.Store.listarClientes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.listarClientes_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="RG" ColumnName="RG" />
+                <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="listarendereco" FunctionName="testepraticoModel.Store.listarendereco">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.listarendereco_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="IdentificadorCliente" ColumnName="IdentificadorCliente" />
+                <ScalarProperty Name="Logradouro" ColumnName="Logradouro" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+                <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+                <ScalarProperty Name="UF" ColumnName="UF" />
+                <ScalarProperty Name="CEP" ColumnName="CEP" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="listarLojas" FunctionName="testepraticoModel.Store.listarLojas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.listarLojas_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="selecionarCliente" FunctionName="testepraticoModel.Store.selecionarCliente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.selecionarCliente_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="RG" ColumnName="RG" />
+                <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="selecionarClienteAtivo" FunctionName="testepraticoModel.Store.selecionarClienteAtivo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.selecionarClienteAtivo_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="RG" ColumnName="RG" />
+                <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="selecionarEndereco" FunctionName="testepraticoModel.Store.selecionarEndereco">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.selecionarEndereco_Result">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="IdentificadorCliente" ColumnName="IdentificadorCliente" />
+                <ScalarProperty Name="Logradouro" ColumnName="Logradouro" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Complemento" ColumnName="Complemento" />
+                <ScalarProperty Name="Cidade" ColumnName="Cidade" />
+                <ScalarProperty Name="UF" ColumnName="UF" />
+                <ScalarProperty Name="CEP" ColumnName="CEP" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="testepraticoModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="testepraticoModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="testepraticoModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="testepraticoModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="testepraticoModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testepraticoModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="testepraticoModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="testepraticoModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TestePratico_crud.Models.Cliente>
+
+@{
+    ViewBag.Title = "Clientes";
+}
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CPF)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RG)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ativo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CPF)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RG)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataNascimento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ativo)
+        </td>
+        <td>
+            @*@Html.ActionLink("Editar", "Edit", new { id=item.Identificador }) |*@
+            @Html.ActionLink("Detalhes", "Details", new { id=item.Identificador }) |
+            @Html.ActionLink("Deletar", "Delete", new { id=item.Identificador })
+        </td>
+    </tr>
+}
+
+</table>

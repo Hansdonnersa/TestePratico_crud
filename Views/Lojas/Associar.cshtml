@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TestePratico_crud.Models.Cliente>
+
+@{
+    ViewBag.Title = "Associar Clientes";
+}
+@{var Loja = ViewBag.IdLoja;}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+
+        <th>
+
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+
+            <td>
+                @if (item.Loja.Any(x => x.Identificador == Loja))
+                {
+                    @Html.ActionLink("Desassociar", "DesassociarCliente", new { idCliente = item.Identificador, idLoja = Loja })
+
+                }
+                else
+                {
+                    @Html.ActionLink("Associar", "AssociarCliente", new { idCliente = item.Identificador, idLoja = Loja })
+
+                }
+            </td>
+        </tr>
+
+
+    }
+
+    </table>
+
+     

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<TestePratico_crud.Models.Loja>
+
+@{
+    ViewBag.Title = "Lojas";
+}
+
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.Identificador }) |
+            @Html.ActionLink("Detalhes", "Details", new { id=item.Identificador }) |
+            @Html.ActionLink("Deletar", "Delete", new { id=item.Identificador })
+            @Html.ActionLink("Associar", "Associar", new { id=item.Identificador })
+        </td>
+    </tr>
+}
+
+</table>

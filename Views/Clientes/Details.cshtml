@@ -1,0 +1,132 @@
+﻿@model TestePratico_crud.Models.Cliente
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPF)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPF)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataNascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ativo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ativo)
+        </dd>
+
+    </dl>
+</div>
+@foreach (var item in Model.Endereco)
+{
+<div>
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.Logradouro)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.Logradouro)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.CEP)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.CEP)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.Numero)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.Numero)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.Complemento)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.Complemento)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.Cidade)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.Cidade)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(modelItem => item.UF)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(modelItem => item.UF)
+    </dd>
+
+
+
+
+</div>
+} <h2> lojas </h2>
+
+
+@foreach (var item in Model.Loja)
+{
+    <div>
+        <dt>
+            @Html.DisplayNameFor(modelItem => item.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </dd>
+
+       
+
+
+
+
+
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Identificador }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
